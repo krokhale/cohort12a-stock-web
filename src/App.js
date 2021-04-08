@@ -11,6 +11,13 @@ import './App.css';
 // 3. Define the models in the system
 // 4. Test out the API in a REST client like postman
 
+// Next Session
+
+// 1. Set up an initial value for the wallet/ Seed the wallet with a certain amount
+// 2. Search a stock from the React APP front end and show the results
+// 3. Ability to buy a stock
+// 4. Ability to sell a stock
+
 function App() {
   return (
     <>
