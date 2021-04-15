@@ -19,7 +19,7 @@ import {useEffect, useState} from 'react';
 // 3. Ability to buy a stock
 // 4. Ability to sell a stock
 
-// Latest HW
+// HW
 // 1. Stop showing the boxes below on the second search
 // 2. Make the cash value show up as an actual number - fetch the wallet value from the backend on page load HINT: use useEffect
 // 3. Show the portfolio items in the table on the right hand side
@@ -29,28 +29,54 @@ import {useEffect, useState} from 'react';
 // 2. Cleaning up the UI
 // 3. Host the app on heroku
 
+// Latest HW
+
+// 1. Figure out a way to not buy a stock unless the wallet can cover the transaction. If not show an error
+// 2. Show only update two decimal places in the wallet value on the UI
+
+// For submission
+// 1. Show the portfolio items on the right hand side box. List out the stocks bought
+// 2. Add a sell button Besides each stock, once i click on the sell button for a stock, it should delete the stock from the portfolio table and update the wallet
+
+
 function App() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [activeSearch, setActiveSearch] = useState();
     const [buyQuantity, setBuyQuantity] = useState();
+    const [wallet, setWallet] = useState();
 
     // http://localhost:3000/api/v1/portfolio
+
+    console.log(process.env.REACT_APP_API_URL);
+    let apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+
 
 
     const searchStock = async () => {
         console.log('searching for the stock')
         console.log(searchTerm);
-        let res = await fetch(`http://localhost:3000/api/v1/search/${searchTerm}`);
+        let res = await fetch(`${apiUrl}/api/v1/search/${searchTerm}`);
         let json = await res.json();
         console.log(json);
         setActiveSearch(json.data);
     };
 
+    const fetchWallet = async () => {
+        console.log('fetches the wallet from the backend')
+        let res = await fetch(`${apiUrl}/api/v1/wallet`);
+        let json = await res.json();
+        console.log(json);
+        setWallet(json.value);
+    };
+
+    useEffect(() => {
+        fetchWallet();
+    }, [])
+
     const buyStock = async () => {
         console.log('buy the stock!')
-
-        let res = await fetch(`http://localhost:3000/api/v1/portfolio`, {
+        let res = await fetch(`${apiUrl}/api/v1/portfolio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,6 +90,11 @@ function App() {
         });
         let json = await res.json();
         console.log(json);
+        // at this point the transaction has been successful, you need to show the updated wallet information now.
+        fetchWallet()
+        setBuyQuantity(null)
+        setSearchTerm(null)
+        setActiveSearch(null)
 
     };
 
@@ -86,7 +117,7 @@ function App() {
 
                   </div>
                   <div className={'col-span-12 md:col-span-6 hidden md:block p-3'}>
-                      <h1 className={'text-3xl font-bold text-right text-green-600'}>$100</h1>
+                      <h1 className={'text-3xl font-bold text-right text-green-600'}>${wallet}</h1>
                   </div>
                   {activeSearch && <div className={'col-span-12 md:col-span-6 p-3 bg-gray-200'}>
                       <h1 className={'text-2xl font-bold text-gray-600'}>
