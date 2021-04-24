@@ -49,6 +49,13 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, ReferenceLine, Refe
 // 1. USe a nice element to show the error box.
 
 
+// Submission:
+
+// 1. Show the stock searched for in the UI
+// 2. Implement the buy box functionality
+// 3. Once the user hits buy and you have enough cash to cover the transaction, process the transaction.
+// 4. Show the portfolio table for the user on the right hand side
+
 function App() {
 
     const [searchTerm, setSearchTerm] = useState('');
